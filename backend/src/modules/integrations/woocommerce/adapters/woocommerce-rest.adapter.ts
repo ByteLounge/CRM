@@ -1,3 +1,4 @@
+import https from 'https';
 import axios, { AxiosInstance } from 'axios';
 import { WCExternalCustomer, WCExternalOrder } from '../../../../types/woocommerce';
 import { logger } from '../../../../utils/logger';
@@ -27,15 +28,15 @@ export class WooCommerceRestAdapter implements IWooCommerceAdapter {
         'Content-Type': 'application/json',
         'User-Agent': 'FlowCRM/1.0',
       },
-      httpsAgent: new (require('https').Agent)({
+      httpsAgent: new https.Agent({
         rejectUnauthorized: process.env.NODE_ENV === 'production',
       }),
     });
 
     // Request/Response logging & retry on 429
     this.client.interceptors.response.use(
-      (response) => response,
-      async (error) => {
+      (response: any) => response,
+      async (error: any) => {
         if (error.response?.status === 429) {
           logger.warn('WooCommerce API rate limit encountered. Retrying in 2 seconds...');
           await new Promise((resolve) => setTimeout(resolve, 2000));
