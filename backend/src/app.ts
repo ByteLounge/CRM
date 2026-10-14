@@ -1,5 +1,7 @@
 import cors from 'cors';
-import express, { Express, Request, Response } from 'express';
+import express, { Express, NextFunction, Request, Response } from 'express';
+import fs from 'fs';
+import path from 'path';
 import { env } from './config/env';
 import { errorHandler } from './middleware/errorHandler';
 import aiRoutes from './modules/ai/ai.routes';
@@ -51,6 +53,24 @@ export function createApp(): Express {
   app.use('/api/v1/integrations/woocommerce', woocommerceRoutes);
   app.use('/api/v1/analytics', analyticsRoutes);
   app.use('/api/v1/ai', aiRoutes);
+
+  // Serve static frontend in production (Single Unified Service on Render)
+  const candidatePaths = [
+    path.resolve(__dirname, '../../frontend/dist'),
+    path.resolve(__dirname, '../frontend/dist'),
+    path.resolve(process.cwd(), 'frontend/dist'),
+  ];
+  const frontendDistPath = candidatePaths.find((p) => fs.existsSync(p));
+
+  if (frontendDistPath) {
+    app.use(express.static(frontendDistPath));
+    app.get('*', (req: Request, res: Response, next: NextFunction) => {
+      if (req.path.startsWith('/api')) {
+        return next();
+      }
+      res.sendFile(path.join(frontendDistPath, 'index.html'));
+    });
+  }
 
   // Error Handler
   app.use(errorHandler);

@@ -23,7 +23,7 @@ declare global {
 // Initialize server-side Supabase client with service role key if available
 export const supabaseAdmin =
   env.SUPABASE_URL && (env.SUPABASE_SERVICE_ROLE_KEY || env.SUPABASE_ANON_KEY)
-    ? createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY || env.SUPABASE_ANON_KEY, {
+    ? createClient(env.SUPABASE_URL, (env.SUPABASE_SERVICE_ROLE_KEY || env.SUPABASE_ANON_KEY) as string, {
         auth: { autoRefreshToken: false, persistSession: false },
       })
     : null;
