@@ -3,20 +3,26 @@
 <div align="center">
 
 ![FlowCRM Banner](https://img.shields.io/badge/FlowCRM-Intelligent%20WooCommerce%20CRM-4f46e5?style=for-the-badge&logo=woocommerce&logoColor=white)
+<br/>
+<br/>
+
+[![Live Production Demo](https://img.shields.io/badge/🚀%20Live%20Demo-flowcrm--qp31.onrender.com-brightgreen?style=for-the-badge&logo=render&logoColor=white)](https://flowcrm-qp31.onrender.com)
 
 **A production-ready, full-stack B2B SaaS Customer Relationship Management system designed specifically for WooCommerce store operators.**
 
+[![Live Hosted](https://img.shields.io/badge/Render-Deployed%20Live-46E3B7?style=flat-square&logo=render&logoColor=white)](https://flowcrm-qp31.onrender.com)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-18.3-61DAFB?style=flat-square&logo=react&logoColor=black)](https://reactjs.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-20+-339933?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org/)
 [![Express](https://img.shields.io/badge/Express-4.21-000000?style=flat-square&logo=express&logoColor=white)](https://expressjs.com/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![Supabase](https://img.shields.io/badge/Supabase-Auth%20%26%20Postgres-3ECF8E?style=flat-square&logo=supabase&logoColor=white)](https://supabase.com/)
-[![Render](https://img.shields.io/badge/Render-Deployed%20Full--Stack-46E3B7?style=flat-square&logo=render&logoColor=white)](https://render.com/)
 [![Vitest](https://img.shields.io/badge/Tests-10%20Passed%20(100%25)-brightgreen?style=flat-square&logo=vitest&logoColor=white)](https://vitest.dev/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
-[Live Demo & Fast-Track Login](#-instant-fast-track-demo) • [Architecture Diagrams](#-system-architecture--flow-diagrams) • [Key Features](#-core-feature-modules) • [Live WooCommerce Setup](#-live-woocommerce-connection-guide) • [Render Deployment](#-production-deployment-on-render) • [API Specification](#-restful-api-reference)
+<br/>
+
+**[🚀 Open Live App](https://flowcrm-qp31.onrender.com)** • [⚡ Fast-Track Demo](#-instant-fast-track-demo) • [📐 Architecture Diagrams](#-system-architecture--flow-diagrams) • [🚀 Key Features](#-core-feature-modules) • [🔌 Live WooCommerce Setup](#-live-woocommerce-connection-guide) • [☁️ Render Deployment](#-production-deployment-on-render) • [📡 API Reference](#-restful-api-reference)
 
 </div>
 
@@ -73,12 +79,15 @@ WooCommerce powers millions of e-commerce storefronts globally, but operates str
 
 ## ⚡ Instant Fast-Track Demo
 
-You can test FlowCRM locally or on any hosted URL in **under 5 seconds**:
+> [!TIP]
+> **🚀 Live Production Deployment:** The application is live and hosted at **[https://flowcrm-qp31.onrender.com](https://flowcrm-qp31.onrender.com)**.
 
-1. Open the application URL (e.g. `http://localhost:5173` or your hosted Render URL).
+You can test FlowCRM live in **under 5 seconds**:
+
+1. Open the live deployment at **[https://flowcrm-qp31.onrender.com](https://flowcrm-qp31.onrender.com)** (or locally at `http://localhost:5173`).
 2. On the login screen, click the **"⚡ Instant 1-Click Demo Login"** button.
 3. The system automatically provisions a demo JWT session and takes you straight into the live dashboard with pre-seeded customers, orders, and AI intelligence.
-4. Test the **"Sync WooCommerce"** button in the header to run live ingestion!
+4. Click the **"Sync WooCommerce"** button in the top navigation bar to test live synchronous store ingestion!
 
 ---
 
@@ -294,7 +303,7 @@ FlowCRM deploys onto Render as a **single unified Web Service**, eliminating cro
 ```mermaid
 flowchart TD
     subgraph Browser ["User Browser - Desktop / Tablet / Mobile"]
-        UserReq["HTTP Request to https://flowcrm.onrender.com"]
+        UserReq["HTTP Request to https://flowcrm-qp31.onrender.com"]
     end
 
     subgraph RenderContainer ["Render Web Service Container - Port 10000"]
@@ -392,7 +401,7 @@ To ingest orders and customers automatically in real-time:
 3. Set **Topic** to `Order created` (create additional webhooks for `Order updated` and `Customer created`).
 4. Set **Delivery URL** to:
    ```
-   https://<your-render-app-url>/api/v1/integrations/woocommerce/webhook
+   https://flowcrm-qp31.onrender.com/api/v1/integrations/woocommerce/webhook
    ```
 5. Enter your Webhook Secret matching `WOOCOMMERCE_WEBHOOK_SECRET` in your environment variables.
 6. Click **Save Webhook**.
@@ -463,9 +472,12 @@ Open [http://localhost:5173](http://localhost:5173) in your browser and click **
 
 ## ☁️ Production Deployment on Render
 
-FlowCRM is optimized for deployment as a **single unified Web Service** on Render, running both the React frontend and Express API on the same domain:
+> [!TIP]
+> **🚀 Live Hosted Application:** FlowCRM is deployed and active at **[https://flowcrm-qp31.onrender.com](https://flowcrm-qp31.onrender.com)**.
 
-### Method 1: Render Web Service (Recommended)
+FlowCRM is designed for deployment as a **single unified Web Service** on Render, running both the React frontend and Express API on the exact same domain with zero CORS friction:
+
+### Method 1: Render Web Service (Standard Setup)
 
 1. Go to [dashboard.render.com](https://dashboard.render.com/) and click **"New +" ➔ "Web Service"**.
 2. Connect your GitHub repository (`ByteLounge/CRM`).
@@ -476,6 +488,7 @@ FlowCRM is optimized for deployment as a **single unified Web Service** on Rende
      ```bash
      npm run install:all && npm run build
      ```
+     *(Note: Root `package.json` includes automated `prebuild` and `postinstall` hooks, ensuring all frontend and backend dependencies are installed even if Render runs `yarn install; yarn build`).*
    - **Start Command:**
      ```bash
      npm start
@@ -500,7 +513,7 @@ FlowCRM is optimized for deployment as a **single unified Web Service** on Rende
    | `WOOCOMMERCE_WEBHOOK_SECRET` | `flowcrm_webhook_secret_key_123` | Webhook verification secret |
 
 5. Click **"Deploy Web Service"**.
-6. Render builds the React application, compiles TypeScript, and starts the unified server at `https://flowcrm.onrender.com`.
+6. Render builds both the React app and Express backend and serves the full application at **[https://flowcrm-qp31.onrender.com](https://flowcrm-qp31.onrender.com)**.
 
 ### Method 2: Render Blueprint (Infrastructure-as-Code via `render.yaml`)
 

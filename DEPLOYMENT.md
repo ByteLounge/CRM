@@ -1,12 +1,16 @@
 # FlowCRM — Render Cloud Deployment Guide (Frontend & Backend)
 
+> [!TIP]
+> **Live Production App:** FlowCRM is deployed and running live on Render at:
+> **[https://flowcrm-qp31.onrender.com](https://flowcrm-qp31.onrender.com)**
+
 FlowCRM is designed to run seamlessly on **[Render.com](https://render.com/)** as a **single unified full-stack service** (serving both the React frontend and Express REST API from a single free URL) or as two separate services.
 
 ---
 
 ## Method 1: Single Unified Web Service (Recommended — 2 Minutes)
 
-Because Express serves the compiled React application from `frontend/dist` with SPA fallback routing, you can deploy **both Frontend and Backend together under a single Render service**. This eliminates CORS issues and gives you a single URL (e.g. `https://flowcrm.onrender.com`).
+Because Express serves the compiled React application from `frontend/dist` with SPA fallback routing, you can deploy **both Frontend and Backend together under a single Render service**. This eliminates CORS issues and gives you a single URL (e.g. `https://flowcrm-qp31.onrender.com`).
 
 ### Step-by-Step Setup:
 
