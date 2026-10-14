@@ -43,6 +43,10 @@ export class DatabaseRepository {
   }
 
   async createOrganisation(name: string, customId?: string): Promise<Organisation> {
+    if (customId) {
+      const existing = await this.getOrganisationById(customId);
+      if (existing) return existing;
+    }
     const id = customId || crypto.randomUUID();
     const now = new Date().toISOString();
     await db.execute(

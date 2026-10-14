@@ -172,18 +172,28 @@ class SQLiteDatabaseClient implements IDatabaseClient {
   }
 
   public async query<T = any>(sql: string, params: any[] = []): Promise<T[]> {
-    // Adapt Postgres positional parameters $1, $2, etc. to SQLite ?
-    let index = 1;
-    const sqliteSql = sql.replace(/\$\d+/g, () => '?');
+    const sqliteSql = sql.replace(/\$(\d+)/g, '@p$1');
+    const paramObj: Record<string, any> = {};
+    params.forEach((val, idx) => {
+      paramObj[`p${idx + 1}`] = val;
+    });
     const stmt = this.db.prepare(sqliteSql);
-    const rows = stmt.all(...params) as T[];
+    const rows = (Object.keys(paramObj).length > 0 ? stmt.all(paramObj) : stmt.all()) as T[];
     return rows;
   }
 
   public async execute(sql: string, params: any[] = []): Promise<void> {
-    const sqliteSql = sql.replace(/\$\d+/g, () => '?');
+    const sqliteSql = sql.replace(/\$(\d+)/g, '@p$1');
+    const paramObj: Record<string, any> = {};
+    params.forEach((val, idx) => {
+      paramObj[`p${idx + 1}`] = val;
+    });
     const stmt = this.db.prepare(sqliteSql);
-    stmt.run(...params);
+    if (Object.keys(paramObj).length > 0) {
+      stmt.run(paramObj);
+    } else {
+      stmt.run();
+    }
   }
 
   public async transaction<T>(fn: () => Promise<T>): Promise<T> {
