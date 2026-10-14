@@ -2,7 +2,6 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   Bot,
   Check,
-  CheckCircle2,
   Clock,
   Mail,
   Plus,
@@ -14,12 +13,12 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { CommunicationStatusBadge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/Card';
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card';
 import { Dialog } from '../components/ui/Dialog';
 import { Input } from '../components/ui/Input';
 import { Skeleton } from '../components/ui/Skeleton';
 import { api } from '../services/api';
-import { CommunicationPurpose, CommunicationStatus } from '../types/crm';
+import { CommunicationPurpose } from '../types/crm';
 
 export const CommunicationsPage: React.FC = () => {
   const [searchParams] = useSearchParams();

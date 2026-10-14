@@ -16,9 +16,6 @@ import {
   Bar,
   BarChart,
   CartesianGrid,
-  Cell,
-  Pie,
-  PieChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -29,8 +26,6 @@ import { Button } from '../components/ui/Button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/Card';
 import { Skeleton } from '../components/ui/Skeleton';
 import { api } from '../services/api';
-
-const COLORS = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
 
 export const OverviewPage: React.FC = () => {
   const { data: analytics, isLoading, error } = useQuery({
@@ -82,7 +77,7 @@ export const OverviewPage: React.FC = () => {
                 FlowAI Retention Alert: {retentionData.opportunitiesFound} Churn Risk Customers Detected
               </h4>
               <p className="text-xs text-muted-foreground mt-0.5">
-                Valuable repeat customers have entered the inactive zone (>45 days). Review targeted retention offers.
+                Valuable repeat customers have entered the inactive zone (&gt;45 days). Review targeted retention offers.
               </p>
             </div>
           </div>

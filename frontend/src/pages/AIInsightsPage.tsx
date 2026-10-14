@@ -1,6 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
-  AlertTriangle,
   ArrowRight,
   Bot,
   CheckCircle2,
@@ -15,9 +14,9 @@ import {
 } from 'lucide-react';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Badge, SegmentBadge } from '../components/ui/Badge';
+import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/Card';
+import { Card, CardContent, CardHeader } from '../components/ui/Card';
 import { Skeleton } from '../components/ui/Skeleton';
 import { api } from '../services/api';
 import { CustomerInsights, RetentionOpportunity } from '../types/crm';
@@ -48,7 +47,6 @@ export const AIInsightsPage: React.FC = () => {
   const {
     data: customerInsights,
     isLoading: isInsightsLoading,
-    refetch: refetchInsights,
   } = useQuery<CustomerInsights | null>({
     queryKey: ['customerInsightsQuery', selectedCustomerId],
     queryFn: () => (selectedCustomerId ? api.ai.getInsights(selectedCustomerId) : null),
