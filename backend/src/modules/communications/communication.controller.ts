@@ -7,9 +7,9 @@ export class CommunicationController {
     const { customerId, status, limit } = req.query as any;
 
     const communications = await repo.listCommunications(orgId, {
-      customerId,
-      status,
-      limit: limit ? parseInt(limit, 10) : 50,
+      customerId: customerId as string | undefined,
+      status: status as string | undefined,
+      limit: limit ? parseInt(limit as string, 10) : 50,
     });
 
     res.json({ communications });
@@ -17,7 +17,7 @@ export class CommunicationController {
 
   async getById(req: Request, res: Response): Promise<void> {
     const orgId = req.user!.orgId;
-    const { id } = req.params;
+    const id = req.params.id as string;
 
     const communication = await repo.getCommunicationById(orgId, id);
     if (!communication) {
@@ -60,7 +60,7 @@ export class CommunicationController {
 
   async updateStatus(req: Request, res: Response): Promise<void> {
     const orgId = req.user!.orgId;
-    const { id } = req.params;
+    const id = req.params.id as string;
     const { status } = req.body;
 
     const existing = await repo.getCommunicationById(orgId, id);

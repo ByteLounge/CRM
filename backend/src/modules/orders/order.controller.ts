@@ -7,8 +7,8 @@ export class OrderController {
     const query = req.query as any;
 
     const result = await repo.listOrders(orgId, {
-      customerId: query.customerId,
-      search: query.search,
+      customerId: query.customerId as string | undefined,
+      search: query.search as string | undefined,
       status: query.status,
       sortBy: query.sortBy,
       sortOrder: query.sortOrder,
@@ -26,7 +26,7 @@ export class OrderController {
 
   async getById(req: Request, res: Response): Promise<void> {
     const orgId = req.user!.orgId;
-    const { id } = req.params;
+    const id = req.params.id as string;
 
     const order = await repo.getOrderById(orgId, id);
     if (!order) {

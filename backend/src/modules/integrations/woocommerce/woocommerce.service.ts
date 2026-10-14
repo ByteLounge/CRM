@@ -21,11 +21,12 @@ export class WooCommerceService {
       !creds.consumer_key.includes('mock');
 
     if (!forceMock && hasLiveCreds) {
-      logger.info(`Using WooCommerce REST Adapter for org ${orgId} (${creds.store_url || integration?.store_url})`);
+      const storeUrl = integration?.store_url || env.WOOCOMMERCE_STORE_URL;
+      logger.info(`Using WooCommerce REST Adapter for org ${orgId} (${storeUrl})`);
       return new WooCommerceRestAdapter({
-        storeUrl: creds.store_url || integration?.store_url || env.WOOCOMMERCE_STORE_URL,
-        consumerKey: creds.consumer_key,
-        consumerSecret: creds.consumer_secret,
+        storeUrl,
+        consumerKey: creds.consumer_key as string,
+        consumerSecret: creds.consumer_secret as string,
       });
     }
 

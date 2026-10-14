@@ -7,7 +7,7 @@ export class CustomerController {
     const query = req.query as any;
 
     const result = await repo.listCustomers(orgId, {
-      search: query.search,
+      search: query.search as string | undefined,
       segment: query.segment,
       sortBy: query.sortBy,
       sortOrder: query.sortOrder,
@@ -25,7 +25,7 @@ export class CustomerController {
 
   async getById(req: Request, res: Response): Promise<void> {
     const orgId = req.user!.orgId;
-    const { id } = req.params;
+    const id = req.params.id as string;
 
     const customer = await repo.getCustomerById(orgId, id);
     if (!customer) {
@@ -48,14 +48,14 @@ export class CustomerController {
 
   async listNotes(req: Request, res: Response): Promise<void> {
     const orgId = req.user!.orgId;
-    const { id } = req.params;
+    const id = req.params.id as string;
     const notes = await repo.listCustomerNotes(orgId, id);
     res.json({ notes });
   }
 
   async addNote(req: Request, res: Response): Promise<void> {
     const orgId = req.user!.orgId;
-    const { id } = req.params;
+    const id = req.params.id as string;
     const { content } = req.body;
 
     const customer = await repo.getCustomerById(orgId, id);
@@ -71,7 +71,7 @@ export class CustomerController {
 
   async deleteNote(req: Request, res: Response): Promise<void> {
     const orgId = req.user!.orgId;
-    const { noteId } = req.params;
+    const noteId = req.params.noteId as string;
     await repo.deleteCustomerNote(orgId, noteId);
     res.json({ success: true, message: 'Note deleted' });
   }
