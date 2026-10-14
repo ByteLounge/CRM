@@ -12,21 +12,24 @@ export class WooCommerceService {
     const integration = await repo.getIntegrationByOrg(orgId, 'woocommerce');
     const creds = integration?.encrypted_credentials || {};
 
-    const forceMock = env.WOOCOMMERCE_MOCK_MODE || creds.is_mock;
-    const hasLiveCreds =
-      creds.consumer_key &&
-      creds.consumer_secret &&
-      creds.consumer_key.startsWith('ck_') &&
-      creds.consumer_secret.startsWith('cs_') &&
-      !creds.consumer_key.includes('mock');
+    const isMockExplicit = creds.is_mock !== undefined ? creds.is_mock : env.WOOCOMMERCE_MOCK_MODE;
+    const consumerKey = creds.consumer_key || env.WOOCOMMERCE_CONSUMER_KEY;
+    const consumerSecret = creds.consumer_secret || env.WOOCOMMERCE_CONSUMER_SECRET;
+    const storeUrl = (creds.store_url || integration?.store_url || env.WOOCOMMERCE_STORE_URL || '').replace('http://', 'https://');
 
-    if (!forceMock && hasLiveCreds) {
-      const storeUrl = integration?.store_url || env.WOOCOMMERCE_STORE_URL;
+    const hasLiveCreds =
+      consumerKey &&
+      consumerSecret &&
+      consumerKey.startsWith('ck_') &&
+      consumerSecret.startsWith('cs_') &&
+      !consumerKey.includes('mock');
+
+    if (!isMockExplicit && hasLiveCreds) {
       logger.info(`Using WooCommerce REST Adapter for org ${orgId} (${storeUrl})`);
       return new WooCommerceRestAdapter({
         storeUrl,
-        consumerKey: creds.consumer_key as string,
-        consumerSecret: creds.consumer_secret as string,
+        consumerKey: consumerKey as string,
+        consumerSecret: consumerSecret as string,
       });
     }
 
@@ -218,10 +221,13 @@ export class WooCommerceService {
       const now = new Date().toISOString();
       const status = adapter.isMock ? 'demo' : 'connected';
 
+      const existingInt = await repo.getIntegrationByOrg(orgId, 'woocommerce');
+      const existingCreds = existingInt?.encrypted_credentials || {};
+
       // Update integration record
       await repo.upsertIntegration(orgId, {
-        store_url: adapter.isMock ? 'https://demo.flowcrm.store [DEMO MODE]' : env.WOOCOMMERCE_STORE_URL,
-        encrypted_credentials: { is_mock: adapter.isMock },
+        store_url: adapter.isMock ? 'https://demo.flowcrm.store [DEMO MODE]' : (existingInt?.store_url || env.WOOCOMMERCE_STORE_URL),
+        encrypted_credentials: { ...existingCreds, is_mock: adapter.isMock },
         connection_status: status,
         last_sync_at: now,
       });

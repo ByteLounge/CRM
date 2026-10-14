@@ -27,6 +27,9 @@ export class WooCommerceRestAdapter implements IWooCommerceAdapter {
         'Content-Type': 'application/json',
         'User-Agent': 'FlowCRM/1.0',
       },
+      httpsAgent: new (require('https').Agent)({
+        rejectUnauthorized: process.env.NODE_ENV === 'production',
+      }),
     });
 
     // Request/Response logging & retry on 429
