@@ -37,22 +37,10 @@ export async function requireAuth(req: Request, res: Response, next: NextFunctio
     token = authHeader.substring(7);
   }
 
-  // 1. If in development/demo mode or no token provided, provide a default demo session
+  // 1. Require token for all protected endpoints
   if (!token) {
-    const defaultOrg =
-      (await repo.listOrganisations())[0] ||
-      (await repo.createOrganisation('FlowCRM Default Store', 'org_default_01'));
-    const defaultUserId = 'user_demo_01';
-
-    await repo.addOrganisationMember(defaultOrg.id, defaultUserId, 'owner');
-
-    req.user = {
-      userId: defaultUserId,
-      email: 'operator@flowcrm.store',
-      orgId: defaultOrg.id,
-      role: 'owner',
-    };
-    return next();
+    res.status(401).json({ error: 'Unauthorized: Authentication token required. Please log in.' });
+    return;
   }
 
   try {

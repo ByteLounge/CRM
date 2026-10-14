@@ -18,8 +18,14 @@ import { Input } from '../components/ui/Input';
 import { useAuth } from '../context/AuthContext';
 
 export const LoginPage: React.FC = () => {
-  const { login, signup, loginDemo } = useAuth();
+  const { user, login, signup, loginDemo } = useAuth();
   const navigate = useNavigate();
+
+  React.useEffect(() => {
+    if (user) {
+      navigate('/', { replace: true });
+    }
+  }, [user, navigate]);
 
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
   const [email, setEmail] = useState('operator@flowcrm.store');

@@ -31,15 +31,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isLoading, setIsLoading] = useState(true);
 
   const checkAuth = async () => {
+    const token = localStorage.getItem('flowcrm_token');
+    if (!token) {
+      setUser(null);
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const data = await api.auth.getMe();
       if (data?.user) {
         setUser(data.user);
         setOrganisation(data.currentOrganisation || { id: 'org_default_01', name: 'FlowCRM Store' });
       } else {
+        localStorage.removeItem('flowcrm_token');
         setUser(null);
       }
     } catch {
+      localStorage.removeItem('flowcrm_token');
       setUser(null);
     } finally {
       setIsLoading(false);
@@ -65,6 +74,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         localStorage.removeItem('flowcrm_org_id');
         setUser(null);
         setOrganisation(null);
+        setIsLoading(false);
       }
     });
 

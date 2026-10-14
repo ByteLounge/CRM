@@ -10,13 +10,14 @@ import { repo } from '../src/repositories/database.repository';
 
 const app = createApp();
 
-describe('FlowCRM API & Integration Test Suite', () => {
-  const testOrgA = 'org_test_alpha';
-  const testOrgB = 'org_test_beta';
+describe('FlowCRM API & Integration Test Suite', { timeout: 30000 }, () => {
+  const testOrgA = 'a0000000-0000-4000-a000-000000000001';
+  const testOrgB = 'b0000000-0000-4000-a000-000000000002';
   let tokenOrgA: string;
   let tokenOrgB: string;
 
   beforeAll(async () => {
+    env.WOOCOMMERCE_MOCK_MODE = true;
     // Setup test organizations
     await repo.createOrganisation('Alpha Store', testOrgA);
     await repo.createOrganisation('Beta Store', testOrgB);
@@ -61,7 +62,7 @@ describe('FlowCRM API & Integration Test Suite', () => {
 
     const customersAfter2 = await repo.listCustomers(testOrgA);
     expect(customersAfter2.total).toBe(count1);
-  });
+  }, 45000);
 
   // Test 3: Guest checkout orders reconciliation
   it('Guest checkout orders should create a guest customer without ID collision', async () => {

@@ -24,17 +24,17 @@ export class WooCommerceService {
       consumerSecret.startsWith('cs_') &&
       !consumerKey.includes('mock');
 
-    if (!isMockExplicit && hasLiveCreds) {
-      logger.info(`Using WooCommerce REST Adapter for org ${orgId} (${storeUrl})`);
-      return new WooCommerceRestAdapter({
-        storeUrl,
-        consumerKey: consumerKey as string,
-        consumerSecret: consumerSecret as string,
-      });
+    if (env.WOOCOMMERCE_MOCK_MODE || creds.is_mock === true || !hasLiveCreds) {
+      logger.info(`Using WooCommerce Mock Adapter [DEMO MODE] for org ${orgId}`);
+      return new WooCommerceMockAdapter();
     }
 
-    logger.info(`Using WooCommerce Mock Adapter [DEMO MODE] for org ${orgId}`);
-    return new WooCommerceMockAdapter();
+    logger.info(`Using WooCommerce REST Adapter for org ${orgId} (${storeUrl})`);
+    return new WooCommerceRestAdapter({
+      storeUrl,
+      consumerKey: consumerKey as string,
+      consumerSecret: consumerSecret as string,
+    });
   }
 
   async testConnection(orgId: string): Promise<{ success: boolean; isMock: boolean; storeName?: string; error?: string }> {
