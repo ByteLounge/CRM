@@ -37,8 +37,12 @@ export const api = {
       const res = await apiClient.get('/auth/me');
       return res.data;
     },
-    login: async (email: string) => {
-      const res = await apiClient.post('/auth/login', { email });
+    login: async (email: string, password?: string) => {
+      const res = await apiClient.post('/auth/login', { email, password });
+      return res.data;
+    },
+    signup: async (email: string, password: string) => {
+      const res = await apiClient.post('/auth/signup', { email, password });
       return res.data;
     },
   },

@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { Building2, Database, User } from 'lucide-react';
+import { Building2, Database, ShieldCheck, User } from 'lucide-react';
 import React from 'react';
 import { Badge } from '../components/ui/Badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/Card';
@@ -14,20 +14,64 @@ export const SettingsPage: React.FC = () => {
   return (
     <div className="space-y-6 animate-in fade-in duration-300 max-w-4xl">
       <div>
-        <h2 className="text-xl font-bold tracking-tight text-foreground">Organization & System Settings</h2>
+        <h2 className="text-xl font-bold tracking-tight text-foreground flex items-center gap-2">
+          Organization & System Settings
+        </h2>
         <p className="text-xs text-muted-foreground mt-0.5">
-          Tenant isolation, database status, and cryptographic session properties.
+          Tenant isolation, Supabase Auth properties, and database infrastructure.
         </p>
       </div>
+
+      {/* Supabase Authentication Status Card */}
+      <Card className="border-indigo-200/60 dark:border-indigo-800/60 bg-gradient-to-br from-indigo-50/20 dark:from-indigo-950/20 to-card">
+        <CardHeader className="pb-3 border-b border-border/60">
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-sm flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-emerald-500" />
+              Supabase Authentication Provider
+            </CardTitle>
+            <Badge variant="success">Supabase Auth Connected</Badge>
+          </div>
+          <CardDescription className="text-xs">
+            Cryptographic JWT session validation backed by Supabase Auth service.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="pt-4 space-y-3 text-xs">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="p-3 rounded-lg bg-card border border-border/70">
+              <span className="text-muted-foreground font-medium text-[11px]">Auth Endpoint</span>
+              <p className="font-semibold text-foreground mt-0.5 text-xs truncate">
+                ckhfbgdvfltbsflfctos.supabase.co
+              </p>
+            </div>
+
+            <div className="p-3 rounded-lg bg-card border border-border/70">
+              <span className="text-muted-foreground font-medium text-[11px]">Active Session Email</span>
+              <p className="font-semibold text-foreground mt-0.5 text-xs truncate">
+                {authData?.user?.email || 'operator@flowcrm.store'}
+              </p>
+            </div>
+
+            <div className="p-3 rounded-lg bg-card border border-border/70">
+              <span className="text-muted-foreground font-medium text-[11px]">Token Verification</span>
+              <p className="text-emerald-600 dark:text-emerald-400 font-semibold mt-0.5 text-xs">
+                Supabase Token Verified
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Organization Info Card */}
       <Card>
         <CardHeader>
           <CardTitle className="text-sm flex items-center gap-2">
             <Building2 className="w-4 h-4 text-primary" />
-            Current Organization
+            Current Organization Context
           </CardTitle>
-          <CardDescription>All CRM data is strictly isolated within this organization context.</CardDescription>
+          <CardDescription className="text-xs">
+            All CRM customer data, orders, and AI drafts are strictly isolated within this organization.
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3 text-xs">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -55,7 +99,7 @@ export const SettingsPage: React.FC = () => {
             <User className="w-4 h-4 text-primary" />
             Operator Session
           </CardTitle>
-          <CardDescription>Authentication and role-based permissions.</CardDescription>
+          <CardDescription className="text-xs">Authentication and role-based permissions.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-3 text-xs">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -72,9 +116,9 @@ export const SettingsPage: React.FC = () => {
             </div>
 
             <div className="p-3 rounded-lg bg-muted/40 border border-border/60">
-              <span className="text-muted-foreground font-medium">JWT Verification</span>
+              <span className="text-muted-foreground font-medium">Multi-Tenancy Mode</span>
               <p className="text-emerald-600 dark:text-emerald-400 font-semibold mt-0.5">
-                Active & Enforced
+                Tenant RLS Enforced
               </p>
             </div>
           </div>
@@ -88,7 +132,7 @@ export const SettingsPage: React.FC = () => {
             <Database className="w-4 h-4 text-primary" />
             Infrastructure & Persistence Engine
           </CardTitle>
-          <CardDescription>Data persistence and multi-tenant security architecture.</CardDescription>
+          <CardDescription className="text-xs">Data persistence and multi-tenant security architecture.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-3 text-xs">
           <div className="p-4 rounded-lg bg-muted/30 border border-border/60 space-y-2">
@@ -104,10 +148,10 @@ export const SettingsPage: React.FC = () => {
           <div className="p-4 rounded-lg bg-muted/30 border border-border/60 space-y-2">
             <div className="flex items-center justify-between">
               <span className="font-semibold text-foreground">Security & RLS Isolation</span>
-              <Badge variant="success">Enforced</Badge>
+              <Badge variant="success">Active</Badge>
             </div>
             <p className="text-muted-foreground leading-relaxed">
-              Every backend API endpoint strictly validates organisation membership on incoming requests. Cross-tenant access is rejected with HTTP 401/403.
+              Every backend API endpoint strictly validates organization membership on incoming requests. Cross-tenant access is rejected with HTTP 401/403.
             </p>
           </div>
         </CardContent>

@@ -4,6 +4,10 @@ import { authController } from './auth.controller';
 
 const router = Router();
 
+router.post('/signup', (req, res, next) =>
+  authController.signup(req, res).catch(next)
+);
+
 router.post('/login', (req, res, next) =>
   authController.login(req, res).catch(next)
 );

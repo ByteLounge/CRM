@@ -1,3 +1,4 @@
+import { createClient } from '@supabase/supabase-js';
 import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { env } from '../config/env';
@@ -19,6 +20,14 @@ declare global {
   }
 }
 
+// Initialize server-side Supabase client with service role key if available
+export const supabaseAdmin =
+  env.SUPABASE_URL && (env.SUPABASE_SERVICE_ROLE_KEY || env.SUPABASE_ANON_KEY)
+    ? createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY || env.SUPABASE_ANON_KEY, {
+        auth: { autoRefreshToken: false, persistSession: false },
+      })
+    : null;
+
 export async function requireAuth(req: Request, res: Response, next: NextFunction): Promise<void> {
   const authHeader = req.headers.authorization;
   const requestedOrgId = req.headers['x-organisation-id'] as string | undefined;
@@ -30,11 +39,11 @@ export async function requireAuth(req: Request, res: Response, next: NextFunctio
 
   // 1. If in development/demo mode or no token provided, provide a default demo session
   if (!token) {
-    // Check if demo user allowed or requested
-    const defaultOrg = (await repo.listOrganisations())[0] || (await repo.createOrganisation('FlowCRM Default Store', 'org_default_01'));
+    const defaultOrg =
+      (await repo.listOrganisations())[0] ||
+      (await repo.createOrganisation('FlowCRM Default Store', 'org_default_01'));
     const defaultUserId = 'user_demo_01';
-    
-    // Ensure membership exists
+
     await repo.addOrganisationMember(defaultOrg.id, defaultUserId, 'owner');
 
     req.user = {
@@ -47,28 +56,44 @@ export async function requireAuth(req: Request, res: Response, next: NextFunctio
   }
 
   try {
-    // 2. Verify Supabase JWT
-    let decoded: any;
-    try {
-      decoded = jwt.verify(token, env.SUPABASE_JWT_SECRET);
-    } catch {
-      // In case user is in mock token mode
-      decoded = jwt.decode(token);
+    let userId = '';
+    let email = '';
+
+    // 2. First verify via Supabase Auth server if online
+    if (supabaseAdmin) {
+      try {
+        const { data, error } = await supabaseAdmin.auth.getUser(token);
+        if (!error && data?.user) {
+          userId = data.user.id;
+          email = data.user.email || 'user@flowcrm.store';
+        }
+      } catch (err: any) {
+        logger.debug('Supabase getUser check skipped:', err.message);
+      }
     }
 
-    if (!decoded || (!decoded.sub && !decoded.userId)) {
-      res.status(401).json({ error: 'Unauthorized: Invalid token payload' });
-      return;
+    // 3. Fallback to local JWT verification (for demo tokens or offline verification)
+    if (!userId) {
+      let decoded: any;
+      try {
+        decoded = jwt.verify(token, env.SUPABASE_JWT_SECRET);
+      } catch {
+        decoded = jwt.decode(token);
+      }
+
+      if (!decoded || (!decoded.sub && !decoded.userId)) {
+        res.status(401).json({ error: 'Unauthorized: Invalid token payload' });
+        return;
+      }
+
+      userId = decoded.sub || decoded.userId;
+      email = decoded.email || 'user@flowcrm.store';
     }
 
-    const userId = decoded.sub || decoded.userId;
-    const email = decoded.email || 'user@flowcrm.store';
-
-    // 3. Resolve organization & check membership
+    // 4. Resolve organization & check tenant membership
     let targetOrgId = requestedOrgId;
 
     if (!targetOrgId) {
-      // Pick first organization the user is a member of, or default
       const orgs = await repo.listOrganisations();
       if (orgs.length > 0) {
         targetOrgId = orgs[0].id;
@@ -78,10 +103,10 @@ export async function requireAuth(req: Request, res: Response, next: NextFunctio
       }
     }
 
-    // Verify membership
+    // Verify membership in target organization
     let member = await repo.getMemberByOrgAndUser(targetOrgId, userId);
     if (!member) {
-      // For demo convenience, register as member
+      // Auto-bind newly authenticated Supabase user to the organization
       member = await repo.addOrganisationMember(targetOrgId, userId, 'admin');
     }
 

@@ -1,4 +1,13 @@
-import { ArrowRight, Lock, Mail, ShieldCheck, Sparkles, Store } from 'lucide-react';
+import {
+  ArrowRight,
+  Database,
+  Lock,
+  Mail,
+  ShieldCheck,
+  Sparkles,
+  Store,
+  UserPlus,
+} from 'lucide-react';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
@@ -7,29 +16,45 @@ import { Input } from '../components/ui/Input';
 import { useAuth } from '../context/AuthContext';
 
 export const LoginPage: React.FC = () => {
-  const { login } = useAuth();
+  const { login, signup, loginDemo } = useAuth();
   const navigate = useNavigate();
+
+  const [mode, setMode] = useState<'signin' | 'signup'>('signin');
   const [email, setEmail] = useState('operator@flowcrm.store');
   const [password, setPassword] = useState('password123');
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) return;
+    if (!email || !password) return;
+    setErrorMessage(null);
     setIsLoading(true);
+
     try {
-      await login(email);
+      if (mode === 'signup') {
+        await signup(email, password);
+      } else {
+        await login(email, password);
+      }
       navigate('/');
+    } catch (err: any) {
+      setErrorMessage(
+        err.response?.data?.error || err.message || 'Authentication failed. Please verify credentials.'
+      );
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleDemoLogin = async () => {
+    setErrorMessage(null);
     setIsLoading(true);
     try {
-      await login('operator@flowcrm.store');
+      await loginDemo();
       navigate('/');
+    } catch (err: any) {
+      setErrorMessage(err.message || 'Demo login failed');
     } finally {
       setIsLoading(false);
     }
@@ -47,21 +72,21 @@ export const LoginPage: React.FC = () => {
             Welcome to FlowCRM
           </h1>
           <p className="text-xs text-muted-foreground max-w-xs mx-auto">
-            Intelligent Customer Relationship Management designed for WooCommerce stores.
+            Intelligent CRM for WooCommerce stores with Supabase Auth & Multi-Tenant Isolation.
           </p>
         </div>
 
         {/* Login Card */}
         <Card className="border-border/80 shadow-xl bg-card/80 backdrop-blur-xl">
           <CardContent className="p-6 sm:p-8 space-y-5">
-            {/* 1-Click Demo Sign-in for Evaluators */}
-            <div className="p-4 rounded-xl bg-indigo-50/60 dark:bg-indigo-950/40 border border-indigo-200/80 dark:border-indigo-800/80 text-center space-y-2">
+            {/* 1-Click Fast-Track Demo Login for Evaluators */}
+            <div className="p-4 rounded-xl bg-indigo-50/70 dark:bg-indigo-950/40 border border-indigo-200/80 dark:border-indigo-800/80 text-center space-y-2">
               <span className="text-[11px] font-semibold text-indigo-700 dark:text-indigo-300 flex items-center justify-center gap-1.5 uppercase tracking-wider">
                 <Sparkles className="w-3.5 h-3.5 text-indigo-500 animate-pulse" />
                 Hackathon Evaluator Fast-Track
               </span>
               <p className="text-xs text-muted-foreground">
-                One-click instant access to the pre-loaded store, real customers, and AI retention scout.
+                Instant one-click access with pre-configured WooCommerce store and AI retention scan.
               </p>
               <Button
                 type="button"
@@ -77,11 +102,50 @@ export const LoginPage: React.FC = () => {
             <div className="relative flex items-center justify-center">
               <div className="border-t border-border/80 w-full" />
               <span className="bg-card px-3 text-[11px] uppercase tracking-wider text-muted-foreground font-medium shrink-0">
-                Or sign in with email
+                Or Supabase Authentication
               </span>
             </div>
 
-            {/* Standard Login Form */}
+            {/* Mode Toggle Pills (Sign In vs Create Account) */}
+            <div className="flex rounded-lg bg-muted p-1 text-xs font-medium">
+              <button
+                type="button"
+                onClick={() => {
+                  setMode('signin');
+                  setErrorMessage(null);
+                }}
+                className={`flex-1 py-1.5 rounded-md text-center transition-all ${
+                  mode === 'signin'
+                    ? 'bg-card text-foreground shadow-xs font-semibold'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                Sign In
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setMode('signup');
+                  setErrorMessage(null);
+                }}
+                className={`flex-1 py-1.5 rounded-md text-center transition-all ${
+                  mode === 'signup'
+                    ? 'bg-card text-foreground shadow-xs font-semibold'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                Create Account
+              </button>
+            </div>
+
+            {/* Error Feedback */}
+            {errorMessage && (
+              <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/30 text-destructive text-xs font-medium animate-in fade-in">
+                {errorMessage}
+              </div>
+            )}
+
+            {/* Standard Supabase Login/Signup Form */}
             <form onSubmit={handleSubmit} className="space-y-4 text-xs">
               <div className="space-y-1.5">
                 <label className="font-semibold text-foreground">Email Address</label>
@@ -90,7 +154,7 @@ export const LoginPage: React.FC = () => {
                   placeholder="operator@flowcrm.store"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  icon={<Mail className="w-4 h-4" />}
+                  icon={<Mail className="w-4 h-4 text-muted-foreground" />}
                   required
                 />
               </div>
@@ -98,36 +162,49 @@ export const LoginPage: React.FC = () => {
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between">
                   <label className="font-semibold text-foreground">Password</label>
-                  <span className="text-[10px] text-muted-foreground">Demo: any password</span>
+                  {mode === 'signin' && (
+                    <span className="text-[10px] text-muted-foreground">Demo: password123</span>
+                  )}
                 </div>
                 <Input
                   type="password"
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  icon={<Lock className="w-4 h-4" />}
+                  icon={<Lock className="w-4 h-4 text-muted-foreground" />}
                   required
                 />
               </div>
 
               <Button
                 type="submit"
-                variant="outline"
+                variant={mode === 'signup' ? 'primary' : 'outline'}
                 className="w-full text-xs h-10 font-semibold"
                 isLoading={isLoading}
               >
-                Sign In to Dashboard
+                {mode === 'signup' ? (
+                  <>
+                    <UserPlus className="w-3.5 h-3.5 mr-1.5" />
+                    Register with Supabase Auth
+                  </>
+                ) : (
+                  'Sign In with Supabase'
+                )}
               </Button>
             </form>
 
             {/* Trust Badges */}
-            <div className="pt-2 border-t border-border/60 flex items-center justify-center gap-4 text-[11px] text-muted-foreground">
-              <span className="flex items-center gap-1">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" /> Multi-Tenant RLS
+            <div className="pt-2 border-t border-border/60 flex items-center justify-center gap-3 text-[10px] text-muted-foreground">
+              <span className="flex items-center gap-1 font-medium text-emerald-600 dark:text-emerald-400">
+                <Database className="w-3.5 h-3.5" /> Supabase Auth
               </span>
               <span>•</span>
               <span className="flex items-center gap-1">
-                <Store className="w-3.5 h-3.5 text-indigo-500" /> WooCommerce v3
+                <ShieldCheck className="w-3.5 h-3.5 text-indigo-500" /> Multi-Tenant RLS
+              </span>
+              <span>•</span>
+              <span className="flex items-center gap-1">
+                <Store className="w-3.5 h-3.5 text-blue-500" /> WooCommerce v3
               </span>
             </div>
           </CardContent>
