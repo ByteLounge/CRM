@@ -23,6 +23,10 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+import { CountUp } from '../components/reactbits/CountUp';
+import { DecryptedText } from '../components/reactbits/DecryptedText';
+import { ShinyText } from '../components/reactbits/ShinyText';
+import { SpotlightCard } from '../components/reactbits/SpotlightCard';
 import { OrderStatusBadge, SegmentBadge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/Card';
@@ -73,7 +77,7 @@ export const OverviewPage: React.FC = () => {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
-      {/* Friendly Welcome Banner for Beginners */}
+      {/* Friendly Welcome Banner with ReactBits ShinyText & DecryptedText */}
       <div className="p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-indigo-600 via-indigo-700 to-blue-600 text-white shadow-md relative overflow-hidden">
         <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="space-y-1">
@@ -81,15 +85,16 @@ export const OverviewPage: React.FC = () => {
               <span className="text-xs font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/20 backdrop-blur-md">
                 Store Dashboard
               </span>
-              <span className="text-xs text-indigo-100 flex items-center gap-1">
-                <Sparkles className="w-3.5 h-3.5 text-amber-300" /> FlowAI Active
+              <span className="text-xs text-indigo-100 flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                <ShinyText text="FlowAI Active" speed={3.5} className="text-amber-200" />
               </span>
             </div>
-            <h2 className="text-xl sm:text-2xl font-bold tracking-tight capitalize">
-              Welcome back, {userDisplayName} 👋
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight capitalize flex items-center gap-1.5">
+              Welcome back, <DecryptedText text={userDisplayName} speed={30} className="text-white" /> 👋
             </h2>
             <p className="text-xs sm:text-sm text-indigo-100 max-w-xl">
-              Here is what's happening in your WooCommerce store today. Track your customer segments, orders, and automated retention opportunities at a glance.
+              Real-time customer analytics, revenue trajectories, and automated churn prevention for WooCommerce.
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -105,7 +110,10 @@ export const OverviewPage: React.FC = () => {
 
       {/* Top Retention Alert if Churn Risks exist */}
       {retentionData && retentionData.opportunitiesFound > 0 && (
-        <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/25 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 animate-in fade-in">
+        <SpotlightCard
+          spotlightColor="rgba(245, 158, 11, 0.2)"
+          className="p-4 bg-amber-500/10 border-amber-500/25 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 animate-in fade-in"
+        >
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-lg bg-amber-500 text-white shadow-sm shrink-0">
               <Bot className="w-5 h-5" />
@@ -115,7 +123,7 @@ export const OverviewPage: React.FC = () => {
                 Action Required: {retentionData.opportunitiesFound} Customers at Risk of Churning
               </h4>
               <p className="text-xs text-muted-foreground mt-0.5">
-                Repeat customers who haven't ordered in &gt;45 days. FlowAI prepared personalized win-back messages for your review.
+                Valuable repeat customers who haven't ordered in &gt;45 days. Review FlowAI win-back drafts.
               </p>
             </div>
           </div>
@@ -125,19 +133,19 @@ export const OverviewPage: React.FC = () => {
               <ArrowUpRight className="w-3.5 h-3.5 ml-1" />
             </Button>
           </Link>
-        </div>
+        </SpotlightCard>
       )}
 
-      {/* 4 Clean KPI Metric Cards */}
+      {/* 4 KPI Metric Cards Powered by ReactBits SpotlightCard & CountUp */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Total Customers */}
-        <Card className="hover:shadow-md transition-shadow">
-          <CardContent className="pt-6">
+        <SpotlightCard spotlightColor="rgba(59, 130, 246, 0.18)">
+          <div className="p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs font-medium text-muted-foreground">Total Customers</p>
                 <h3 className="text-2xl font-bold tracking-tight text-foreground mt-1">
-                  {analytics.totalCustomers.toLocaleString()}
+                  <CountUp to={analytics.totalCustomers} duration={1.2} />
                 </h3>
               </div>
               <div className="p-2.5 rounded-xl bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400">
@@ -150,17 +158,17 @@ export const OverviewPage: React.FC = () => {
               </span>
               from WooCommerce
             </p>
-          </CardContent>
-        </Card>
+          </div>
+        </SpotlightCard>
 
         {/* Total Orders */}
-        <Card className="hover:shadow-md transition-shadow">
-          <CardContent className="pt-6">
+        <SpotlightCard spotlightColor="rgba(99, 102, 241, 0.18)">
+          <div className="p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs font-medium text-muted-foreground">Total Orders</p>
                 <h3 className="text-2xl font-bold tracking-tight text-foreground mt-1">
-                  {analytics.totalOrders.toLocaleString()}
+                  <CountUp to={analytics.totalOrders} duration={1.4} />
                 </h3>
               </div>
               <div className="p-2.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400">
@@ -168,17 +176,17 @@ export const OverviewPage: React.FC = () => {
               </div>
             </div>
             <p className="text-[11px] text-muted-foreground mt-3">All store checkouts</p>
-          </CardContent>
-        </Card>
+          </div>
+        </SpotlightCard>
 
         {/* Total Revenue */}
-        <Card className="hover:shadow-md transition-shadow">
-          <CardContent className="pt-6">
+        <SpotlightCard spotlightColor="rgba(16, 185, 129, 0.18)">
+          <div className="p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs font-medium text-muted-foreground">Total Revenue</p>
                 <h3 className="text-2xl font-bold tracking-tight text-foreground mt-1">
-                  ${analytics.totalRevenue.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                  <CountUp to={analytics.totalRevenue} decimals={2} prefix="$" duration={1.6} />
                 </h3>
               </div>
               <div className="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400">
@@ -186,17 +194,17 @@ export const OverviewPage: React.FC = () => {
               </div>
             </div>
             <p className="text-[11px] text-muted-foreground mt-3">Completed store sales</p>
-          </CardContent>
-        </Card>
+          </div>
+        </SpotlightCard>
 
         {/* Average Order Value (AOV) */}
-        <Card className="hover:shadow-md transition-shadow">
-          <CardContent className="pt-6">
+        <SpotlightCard spotlightColor="rgba(168, 85, 247, 0.18)">
+          <div className="p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs font-medium text-muted-foreground">Average Order Value</p>
                 <h3 className="text-2xl font-bold tracking-tight text-foreground mt-1">
-                  ${analytics.aov.toFixed(2)}
+                  <CountUp to={analytics.aov} decimals={2} prefix="$" duration={1.5} />
                 </h3>
               </div>
               <div className="p-2.5 rounded-xl bg-purple-50 dark:bg-purple-950/50 text-purple-600 dark:text-purple-400">
@@ -204,8 +212,8 @@ export const OverviewPage: React.FC = () => {
               </div>
             </div>
             <p className="text-[11px] text-muted-foreground mt-3">Revenue per completed order</p>
-          </CardContent>
-        </Card>
+          </div>
+        </SpotlightCard>
       </div>
 
       {/* Visualizations Grid */}

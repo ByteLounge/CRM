@@ -10,8 +10,10 @@ import {
 } from 'lucide-react';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ShinyText } from '../components/reactbits/ShinyText';
+import { SpotlightCard } from '../components/reactbits/SpotlightCard';
+import { Squares } from '../components/reactbits/Squares';
 import { Button } from '../components/ui/Button';
-import { Card, CardContent } from '../components/ui/Card';
 import { Input } from '../components/ui/Input';
 import { useAuth } from '../context/AuthContext';
 
@@ -61,11 +63,21 @@ export const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center p-4 bg-gradient-to-br from-background via-muted/30 to-background">
-      <div className="w-full max-w-md space-y-6 animate-in fade-in zoom-in-95 duration-300">
+    <div className="relative min-h-screen w-full flex items-center justify-center p-4 bg-background overflow-hidden">
+      {/* React Bits Squares Interactive Ambient Background */}
+      <Squares
+        direction="diagonal"
+        speed={0.4}
+        squareSize={48}
+        borderColor="rgba(99, 102, 241, 0.07)"
+        hoverFillColor="rgba(99, 102, 241, 0.12)"
+        className="opacity-70 dark:opacity-40"
+      />
+
+      <div className="relative z-10 w-full max-w-md space-y-6 animate-in fade-in zoom-in-95 duration-300">
         {/* Brand Header */}
         <div className="text-center space-y-2">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-600 to-blue-500 text-white font-bold text-xl shadow-lg shadow-indigo-500/20 mb-2">
+          <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-600 to-blue-500 text-white font-bold text-xl shadow-lg shadow-indigo-500/25 mb-1 animate-float">
             F
           </div>
           <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center justify-center gap-2">
@@ -76,14 +88,17 @@ export const LoginPage: React.FC = () => {
           </p>
         </div>
 
-        {/* Login Card */}
-        <Card className="border-border/80 shadow-xl bg-card/80 backdrop-blur-xl">
-          <CardContent className="p-6 sm:p-8 space-y-5">
+        {/* React Bits SpotlightCard */}
+        <SpotlightCard
+          spotlightColor="rgba(99, 102, 241, 0.22)"
+          className="shadow-2xl border-border/80 bg-card/90 backdrop-blur-xl"
+        >
+          <div className="p-6 sm:p-8 space-y-5">
             {/* 1-Click Fast-Track Demo Login for Evaluators */}
             <div className="p-4 rounded-xl bg-indigo-50/70 dark:bg-indigo-950/40 border border-indigo-200/80 dark:border-indigo-800/80 text-center space-y-2">
               <span className="text-[11px] font-semibold text-indigo-700 dark:text-indigo-300 flex items-center justify-center gap-1.5 uppercase tracking-wider">
                 <Sparkles className="w-3.5 h-3.5 text-indigo-500 animate-pulse" />
-                Hackathon Evaluator Fast-Track
+                <ShinyText text="Hackathon Evaluator Fast-Track" speed={3.5} className="text-indigo-600 dark:text-indigo-300" />
               </span>
               <p className="text-xs text-muted-foreground">
                 Instant one-click access with pre-configured WooCommerce store and AI retention scan.
@@ -207,8 +222,8 @@ export const LoginPage: React.FC = () => {
                 <Store className="w-3.5 h-3.5 text-blue-500" /> WooCommerce v3
               </span>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </SpotlightCard>
       </div>
     </div>
   );

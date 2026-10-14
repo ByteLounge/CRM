@@ -16,8 +16,10 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
-import { Card, CardContent, CardHeader } from '../components/ui/Card';
+import { Card, CardContent } from '../components/ui/Card';
 import { Skeleton } from '../components/ui/Skeleton';
+import { ShinyText } from '../components/reactbits/ShinyText';
+import { SpotlightCard } from '../components/reactbits/SpotlightCard';
 import { api } from '../services/api';
 import { CustomerInsights, RetentionOpportunity } from '../types/crm';
 
@@ -84,8 +86,9 @@ export const AIInsightsPage: React.FC = () => {
           <div>
             <h2 className="text-xl font-bold tracking-tight text-foreground flex items-center gap-2 flex-wrap">
               FlowAI Intelligence Hub
-              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800 flex items-center gap-1">
-                <Sparkles className="w-3 h-3 text-indigo-500 animate-pulse" /> Gemini Flash 3.8
+              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800 flex items-center gap-1.5">
+                <Sparkles className="w-3 h-3 text-indigo-500 animate-pulse" />
+                <ShinyText text="Gemini Flash 3.8" speed={3.5} className="text-indigo-600 dark:text-indigo-300" />
               </span>
             </h2>
             <p className="text-xs text-muted-foreground mt-0.5">
@@ -185,8 +188,12 @@ export const AIInsightsPage: React.FC = () => {
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {retentionScan.opportunities.map((opp) => (
-              <Card key={opp.customerId} className="hover:border-primary/40 transition-colors shadow-xs">
-                <CardHeader className="pb-3 border-b border-border/60">
+              <SpotlightCard
+                key={opp.customerId}
+                spotlightColor="rgba(244, 63, 94, 0.15)"
+                className="shadow-xs"
+              >
+                <div className="p-5 border-b border-border/60">
                   <div className="flex items-center justify-between">
                     <div>
                       <Link
@@ -213,9 +220,9 @@ export const AIInsightsPage: React.FC = () => {
                       </p>
                     </div>
                   </div>
-                </CardHeader>
+                </div>
 
-                <CardContent className="pt-4 space-y-3 text-xs">
+                <div className="p-5 space-y-3 text-xs">
                   <div>
                     <span className="text-muted-foreground font-medium">Diagnostic:</span>
                     <p className="text-foreground mt-0.5 leading-relaxed">{opp.diagnosis}</p>
@@ -252,8 +259,8 @@ export const AIInsightsPage: React.FC = () => {
                       Approve & Queue Draft
                     </Button>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </SpotlightCard>
             ))}
           </div>
         )}
