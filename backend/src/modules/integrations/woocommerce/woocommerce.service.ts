@@ -15,7 +15,7 @@ export class WooCommerceService {
     const isMockExplicit = creds.is_mock !== undefined ? creds.is_mock : env.WOOCOMMERCE_MOCK_MODE;
     const consumerKey = creds.consumer_key || env.WOOCOMMERCE_CONSUMER_KEY;
     const consumerSecret = creds.consumer_secret || env.WOOCOMMERCE_CONSUMER_SECRET;
-    const storeUrl = (creds.store_url || integration?.store_url || env.WOOCOMMERCE_STORE_URL || '').replace('http://', 'https://');
+    const storeUrl = (integration?.store_url || env.WOOCOMMERCE_STORE_URL || '').replace('http://', 'https://');
 
     const hasLiveCreds =
       consumerKey &&
