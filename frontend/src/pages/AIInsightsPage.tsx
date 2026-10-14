@@ -4,7 +4,6 @@ import {
   Bot,
   CheckCircle2,
   ChevronRight,
-  Info,
   RefreshCw,
   Send,
   ShieldCheck,

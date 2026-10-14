@@ -1,6 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
-  ArrowRight,
   Bot,
   Check,
   Clock,
@@ -15,7 +14,7 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { CommunicationStatusBadge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card';
+import { Card, CardContent } from '../components/ui/Card';
 import { Dialog } from '../components/ui/Dialog';
 import { Input } from '../components/ui/Input';
 import { Skeleton } from '../components/ui/Skeleton';

@@ -11,7 +11,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { SegmentBadge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card';
+import { Card, CardContent } from '../components/ui/Card';
 import { Input } from '../components/ui/Input';
 import { Skeleton } from '../components/ui/Skeleton';
 import { api } from '../services/api';

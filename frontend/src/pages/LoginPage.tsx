@@ -1,4 +1,4 @@
-import { ArrowRight, Bot, Lock, Mail, ShieldCheck, Sparkles, Store } from 'lucide-react';
+import { ArrowRight, Lock, Mail, ShieldCheck, Sparkles, Store } from 'lucide-react';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/Button';

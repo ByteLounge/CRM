@@ -232,22 +232,23 @@ export class WooCommerceService {
         last_sync_at: now,
       });
 
-      const totalProcessed = customersSynced + ordersProcessed;
+      const effectiveCustomersSynced = Math.max(customersSynced, customerIds.size);
+      const totalProcessed = effectiveCustomersSynced + ordersProcessed;
       await repo.updateSyncLog(syncLog.id, 'completed', totalProcessed);
 
       await repo.logActivity(orgId, 'system', 'sync', syncLog.id, 'synced', {
-        customersSynced,
+        customersSynced: effectiveCustomersSynced,
         ordersSynced: ordersProcessed,
         durationMs: Date.now() - startTime,
         isMock: adapter.isMock,
       });
 
-      logger.info(`Full synchronisation completed successfully: ${customersSynced} customers, ${ordersProcessed} orders`);
+      logger.info(`Full synchronisation completed successfully: ${effectiveCustomersSynced} customers, ${ordersProcessed} orders`);
 
       return {
         success: true,
         isMock: adapter.isMock,
-        customersSynced,
+        customersSynced: effectiveCustomersSynced,
         ordersSynced: ordersProcessed,
         lastSyncAt: now,
       };
