@@ -4,6 +4,7 @@ import {
   Bot,
   CheckCircle2,
   ChevronRight,
+  Info,
   RefreshCw,
   Send,
   ShieldCheck,
@@ -78,18 +79,18 @@ export const AIInsightsPage: React.FC = () => {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 text-white shadow-md">
+          <div className="p-2.5 rounded-xl bg-gradient-to-tr from-indigo-600 to-purple-600 text-white shadow-md shrink-0">
             <Bot className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-xl font-bold tracking-tight text-foreground flex items-center gap-2">
-              FlowAI — Customer Intelligence Assistant
+            <h2 className="text-xl font-bold tracking-tight text-foreground flex items-center gap-2 flex-wrap">
+              FlowAI Intelligence Hub
               <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800 flex items-center gap-1">
-                <Sparkles className="w-3 h-3 text-indigo-500 animate-pulse" /> Server-side LLM
+                <Sparkles className="w-3 h-3 text-indigo-500 animate-pulse" /> Gemini Flash 3.8
               </span>
             </h2>
             <p className="text-xs text-muted-foreground mt-0.5">
-              Strictly grounded customer analysis, contextual message generation, and autonomous churn intervention.
+              Grounded customer diagnostics, personalized win-back drafting, and churn intervention.
             </p>
           </div>
         </div>
@@ -99,36 +100,37 @@ export const AIInsightsPage: React.FC = () => {
           size="sm"
           onClick={() => refetchScan()}
           isLoading={isScanRefetching}
+          className="text-xs h-9 self-start sm:self-auto"
         >
           <RefreshCw className={`w-3.5 h-3.5 mr-1.5 ${isScanRefetching ? 'animate-spin' : ''}`} />
-          Run Retention Agent Scan
+          Run Retention Scan
         </Button>
       </div>
 
       {actionSuccessMessage && (
         <div className="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 text-xs font-medium flex items-center justify-between animate-in fade-in">
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
             <span>{actionSuccessMessage}</span>
           </div>
           <Link to="/communications">
-            <Button size="sm" variant="outline" className="text-xs h-7">
-              View Communications Hub
+            <Button size="sm" variant="outline" className="text-xs h-7 border-emerald-300 dark:border-emerald-700">
+              View Communications
             </Button>
           </Link>
         </div>
       )}
 
-      {/* Safety & Grounding Principles Banner */}
-      <Card className="bg-muted/20 border-border/80">
-        <CardContent className="py-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+      {/* Safety & Grounding Principles Banner for Beginners */}
+      <Card className="bg-muted/30 border-border/70">
+        <CardContent className="p-4 sm:p-5">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
             <div className="flex items-start gap-2.5">
               <ShieldCheck className="w-4 h-4 text-indigo-600 mt-0.5 shrink-0" />
               <div>
-                <p className="font-semibold text-foreground">Grounded In Fact</p>
+                <p className="font-semibold text-foreground">100% Grounded in Fact</p>
                 <p className="text-muted-foreground text-[11px] mt-0.5">
-                  Insights rely solely on real WooCommerce purchase timestamps, order frequency, and monetary totals.
+                  AI generates insights solely from real WooCommerce orders, frequency, and spend metrics.
                 </p>
               </div>
             </div>
@@ -136,9 +138,9 @@ export const AIInsightsPage: React.FC = () => {
             <div className="flex items-start gap-2.5">
               <Users className="w-4 h-4 text-emerald-600 mt-0.5 shrink-0" />
               <div>
-                <p className="font-semibold text-foreground">Human Approval Mandatory</p>
+                <p className="font-semibold text-foreground">Human Approval First</p>
                 <p className="text-muted-foreground text-[11px] mt-0.5">
-                  FlowAI never contacts customers autonomously. The operator explicitly reviews and approves all drafts.
+                  No emails are ever sent automatically. You review and approve every message before delivery.
                 </p>
               </div>
             </div>
@@ -146,9 +148,9 @@ export const AIInsightsPage: React.FC = () => {
             <div className="flex items-start gap-2.5">
               <Sparkles className="w-4 h-4 text-purple-600 mt-0.5 shrink-0" />
               <div>
-                <p className="font-semibold text-foreground">Deterministic Guardrails</p>
+                <p className="font-semibold text-foreground">Typed Zod Schema Contracts</p>
                 <p className="text-muted-foreground text-[11px] mt-0.5">
-                  Structured Zod validation ensures every generated output strictly adheres to typed contracts.
+                  Every response is validated for reliable JSON structures and fallbacks.
                 </p>
               </div>
             </div>
@@ -156,16 +158,16 @@ export const AIInsightsPage: React.FC = () => {
         </CardContent>
       </Card>
 
-      {/* SECTION 1: Capability C — Autonomous Retention Agent */}
+      {/* SECTION 1: Autonomous Retention Opportunities */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
             <h3 className="text-base font-bold text-foreground flex items-center gap-2">
               <TrendingDown className="w-4 h-4 text-rose-500" />
-              Autonomous Customer Retention Opportunities
+              Customer Retention Opportunities
             </h3>
             <p className="text-xs text-muted-foreground mt-0.5">
-              Identified customers with high historical value who have exceeded standard re-purchase intervals.
+              Identified customers with high value who have exceeded normal re-purchase intervals.
             </p>
           </div>
           <Badge variant="purple">{retentionScan?.opportunitiesFound ?? 0} Detected</Badge>
@@ -174,7 +176,7 @@ export const AIInsightsPage: React.FC = () => {
         {isScanLoading ? (
           <div className="space-y-3">
             {[1, 2].map((i) => (
-              <Skeleton key={i} className="h-32 w-full" />
+              <Skeleton key={i} className="h-32 w-full rounded-xl" />
             ))}
           </div>
         ) : !retentionScan || retentionScan.opportunities.length === 0 ? (
@@ -184,7 +186,7 @@ export const AIInsightsPage: React.FC = () => {
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {retentionScan.opportunities.map((opp) => (
-              <Card key={opp.customerId} className="hover:border-primary/40 transition-colors">
+              <Card key={opp.customerId} className="hover:border-primary/40 transition-colors shadow-xs">
                 <CardHeader className="pb-3 border-b border-border/60">
                   <div className="flex items-center justify-between">
                     <div>
@@ -199,7 +201,7 @@ export const AIInsightsPage: React.FC = () => {
                     </div>
                     <div className="text-right">
                       <span
-                        className={`text-[11px] font-bold uppercase px-2 py-0.5 rounded-full ${
+                        className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${
                           opp.churnRisk === 'high'
                             ? 'bg-rose-100 text-rose-700 dark:bg-rose-950/60 dark:text-rose-400'
                             : 'bg-amber-100 text-amber-700 dark:bg-amber-950/60 dark:text-amber-400'
@@ -217,27 +219,27 @@ export const AIInsightsPage: React.FC = () => {
                 <CardContent className="pt-4 space-y-3 text-xs">
                   <div>
                     <span className="text-muted-foreground font-medium">Diagnostic:</span>
-                    <p className="text-foreground mt-0.5">{opp.diagnosis}</p>
+                    <p className="text-foreground mt-0.5 leading-relaxed">{opp.diagnosis}</p>
                   </div>
 
-                  <div className="p-3 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-200/50 dark:border-indigo-800/50">
+                  <div className="p-3 rounded-xl bg-indigo-50/50 dark:bg-indigo-950/30 border border-indigo-200/50 dark:border-indigo-800/50">
                     <span className="text-indigo-600 dark:text-indigo-400 font-semibold block text-[11px]">
-                      Recommended Retention Incentive:
+                      Suggested Retention Offer:
                     </span>
                     <p className="text-foreground font-medium mt-0.5">{opp.suggestedOffer}</p>
                   </div>
 
-                  <div className="p-3 rounded-lg bg-muted/40 border border-border/60">
+                  <div className="p-3 rounded-xl bg-muted/40 border border-border/60">
                     <span className="text-muted-foreground font-semibold block text-[10px] uppercase">
                       Draft Message Preview:
                     </span>
                     <p className="font-semibold text-foreground text-[11px] mt-1">{opp.draftSubject}</p>
-                    <p className="text-muted-foreground text-[11px] mt-1 line-clamp-2">{opp.draftMessage}</p>
+                    <p className="text-muted-foreground text-[11px] mt-1 line-clamp-2 leading-relaxed">{opp.draftMessage}</p>
                   </div>
 
-                  <div className="flex items-center justify-end gap-2 pt-2 border-t border-border/60">
-                    <Link to={`/communications?customerId=${opp.customerId}`}>
-                      <Button variant="ghost" size="sm" className="text-xs">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2 pt-2 border-t border-border/60">
+                    <Link to={`/communications?customerId=${opp.customerId}`} className="w-full sm:w-auto">
+                      <Button variant="ghost" size="sm" className="text-xs h-8 w-full sm:w-auto">
                         Edit in Composer
                       </Button>
                     </Link>
@@ -245,7 +247,7 @@ export const AIInsightsPage: React.FC = () => {
                       size="sm"
                       onClick={() => queueRecoveryMutation.mutate(opp)}
                       isLoading={queueRecoveryMutation.isPending}
-                      className="text-xs"
+                      className="text-xs h-8 w-full sm:w-auto"
                     >
                       <Send className="w-3.5 h-3.5 mr-1" />
                       Approve & Queue Draft
@@ -258,7 +260,7 @@ export const AIInsightsPage: React.FC = () => {
         )}
       </div>
 
-      {/* SECTION 2: Capability A & B — Customer Intelligence Explorer */}
+      {/* SECTION 2: Customer Intelligence Explorer */}
       <div className="space-y-4 pt-4 border-t border-border/80">
         <div>
           <h3 className="text-base font-bold text-foreground flex items-center gap-2">
@@ -271,7 +273,7 @@ export const AIInsightsPage: React.FC = () => {
         </div>
 
         <Card>
-          <CardContent className="pt-6 space-y-4">
+          <CardContent className="p-4 sm:p-6 space-y-4">
             <div className="w-full md:w-96">
               <label className="text-xs font-semibold text-foreground block mb-1.5">
                 Select Customer to Inspect
@@ -292,44 +294,44 @@ export const AIInsightsPage: React.FC = () => {
 
             {isInsightsLoading ? (
               <div className="space-y-2 py-4">
-                <Skeleton className="h-6 w-1/3" />
-                <Skeleton className="h-16 w-full" />
+                <Skeleton className="h-6 w-1/3 rounded-md" />
+                <Skeleton className="h-16 w-full rounded-md" />
               </div>
             ) : customerInsights ? (
               <div className="space-y-4 pt-2 text-xs">
-                <div className="p-4 rounded-lg bg-indigo-50/30 dark:bg-indigo-950/20 border border-indigo-200/60 dark:border-indigo-800/60 space-y-2">
+                <div className="p-4 rounded-xl bg-indigo-50/40 dark:bg-indigo-950/30 border border-indigo-200/60 dark:border-indigo-800/60 space-y-1.5">
                   <span className="font-semibold text-foreground text-sm flex items-center gap-1.5">
                     <Bot className="w-4 h-4 text-indigo-600" />
-                    Grounded Behavioral Profile
+                    Behavioral Profile
                   </span>
                   <p className="text-foreground leading-relaxed font-medium">
                     "{customerInsights.summary}"
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
-                  <div className="p-3 rounded-lg bg-card border border-border/80">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  <div className="p-3 rounded-xl bg-card border border-border/80">
                     <span className="text-muted-foreground font-medium text-[11px]">Lifetime Spend</span>
                     <p className="text-base font-bold text-foreground mt-0.5">
                       ${customerInsights.keyMetrics.totalSpent.toFixed(2)}
                     </p>
                   </div>
 
-                  <div className="p-3 rounded-lg bg-card border border-border/80">
+                  <div className="p-3 rounded-xl bg-card border border-border/80">
                     <span className="text-muted-foreground font-medium text-[11px]">Total Orders</span>
                     <p className="text-base font-bold text-foreground mt-0.5">
                       {customerInsights.keyMetrics.totalOrders}
                     </p>
                   </div>
 
-                  <div className="p-3 rounded-lg bg-card border border-border/80">
-                    <span className="text-muted-foreground font-medium text-[11px]">Average Order Value</span>
+                  <div className="p-3 rounded-xl bg-card border border-border/80">
+                    <span className="text-muted-foreground font-medium text-[11px]">Average Order</span>
                     <p className="text-base font-bold text-foreground mt-0.5">
                       ${customerInsights.keyMetrics.averageOrderValue.toFixed(2)}
                     </p>
                   </div>
 
-                  <div className="p-3 rounded-lg bg-card border border-border/80">
+                  <div className="p-3 rounded-xl bg-card border border-border/80">
                     <span className="text-muted-foreground font-medium text-[11px]">Days Inactive</span>
                     <p className="text-base font-bold text-foreground mt-0.5">
                       {customerInsights.keyMetrics.daysSinceLastOrder ?? 'Never'}
@@ -338,8 +340,8 @@ export const AIInsightsPage: React.FC = () => {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="p-4 rounded-lg bg-card border border-border/80">
-                    <span className="text-muted-foreground font-medium">Churn Risk Diagnostics:</span>
+                  <div className="p-4 rounded-xl bg-card border border-border/80">
+                    <span className="text-muted-foreground font-medium">Churn Probability:</span>
                     <div className="flex items-center gap-2 mt-1">
                       <span
                         className={`font-bold uppercase text-xs ${
@@ -356,14 +358,14 @@ export const AIInsightsPage: React.FC = () => {
                     <p className="text-muted-foreground mt-1 text-[11px]">{customerInsights.churnReason}</p>
                   </div>
 
-                  <div className="p-4 rounded-lg bg-card border border-border/80">
+                  <div className="p-4 rounded-xl bg-card border border-border/80">
                     <span className="text-muted-foreground font-medium">Recommended Operator Action:</span>
                     <p className="text-foreground font-semibold mt-1">{customerInsights.recommendedAction}</p>
                     <Link
                       to={`/communications?customerId=${selectedCustomerId}`}
                       className="mt-3 inline-block"
                     >
-                      <Button size="sm" variant="outline" className="text-xs">
+                      <Button size="sm" variant="outline" className="text-xs h-8">
                         Open Composer for this Customer <ChevronRight className="w-3 h-3 ml-1" />
                       </Button>
                     </Link>
