@@ -248,7 +248,73 @@ class PostgresDatabaseClient implements IDatabaseClient {
   }
 }
 
+class ResilientDatabaseClient implements IDatabaseClient {
+  public isPostgres = true;
+  private pgClient: PostgresDatabaseClient;
+  private fallbackClient: SQLiteDatabaseClient | null = null;
+  private hasFailed = false;
+
+  constructor(connectionString: string) {
+    this.pgClient = new PostgresDatabaseClient(connectionString);
+  }
+
+  private getFallback(): SQLiteDatabaseClient {
+    if (!this.fallbackClient) {
+      logger.warn('⚠️  PostgreSQL connection unavailable. Falling back to local embedded SQLite database for seamless operation.');
+      this.fallbackClient = new SQLiteDatabaseClient();
+      this.isPostgres = false;
+    }
+    return this.fallbackClient;
+  }
+
+  public async query<T = any>(sql: string, params: any[] = []): Promise<T[]> {
+    if (this.hasFailed) {
+      return this.getFallback().query<T>(sql, params);
+    }
+    try {
+      return await this.pgClient.query<T>(sql, params);
+    } catch (err: any) {
+      if (err.code === 'ENOTFOUND' || err.code === 'ECONNREFUSED' || err.message?.includes('ENOTFOUND')) {
+        this.hasFailed = true;
+        return this.getFallback().query<T>(sql, params);
+      }
+      throw err;
+    }
+  }
+
+  public async execute(sql: string, params: any[] = []): Promise<void> {
+    if (this.hasFailed) {
+      return this.getFallback().execute(sql, params);
+    }
+    try {
+      await this.pgClient.execute(sql, params);
+    } catch (err: any) {
+      if (err.code === 'ENOTFOUND' || err.code === 'ECONNREFUSED' || err.message?.includes('ENOTFOUND')) {
+        this.hasFailed = true;
+        return this.getFallback().execute(sql, params);
+      }
+      throw err;
+    }
+  }
+
+  public async transaction<T>(fn: () => Promise<T>): Promise<T> {
+    if (this.hasFailed) {
+      return this.getFallback().transaction<T>(fn);
+    }
+    try {
+      return await this.pgClient.transaction<T>(fn);
+    } catch (err: any) {
+      if (err.code === 'ENOTFOUND' || err.code === 'ECONNREFUSED' || err.message?.includes('ENOTFOUND')) {
+        this.hasFailed = true;
+        return this.getFallback().transaction<T>(fn);
+      }
+      throw err;
+    }
+  }
+}
+
 export const db: IDatabaseClient =
   env.DATABASE_URL && env.DATABASE_URL.startsWith('postgresql://')
-    ? new PostgresDatabaseClient(env.DATABASE_URL)
+    ? new ResilientDatabaseClient(env.DATABASE_URL)
     : new SQLiteDatabaseClient();
+

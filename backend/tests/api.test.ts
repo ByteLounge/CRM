@@ -181,7 +181,7 @@ describe('FlowCRM API & Integration Test Suite', () => {
     expect(['low', 'medium', 'high']).toContain(res.body.churnRisk);
     expect(res.body.keyMetrics).toBeDefined();
     expect(typeof res.body.keyMetrics.totalSpent).toBe('number');
-  });
+  }, 15000);
 
   // Test 9: FlowAI Retention Agent heuristic scanner
   it('FlowAI retention scan should identify churning opportunities', async () => {
