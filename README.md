@@ -123,8 +123,8 @@ flowchart TD
     end
 
     subgraph Data ["Persistence Tier"]
-        SupabasePG[("Supabase / PostgreSQL (Primary Cloud DB)")]
-        LocalSQLite[("Embedded SQLite (Zero-Config Fallback)")]
+        SupabasePG[("Supabase / PostgreSQL - Primary Cloud DB")]
+        LocalSQLite[("Embedded SQLite - Zero-Config Fallback")]
     end
 
     subgraph External ["External Services"]
@@ -133,8 +133,8 @@ flowchart TD
     end
 
     UI --> Router --> Components --> Query
-    Query -->|HTTPS / JSON API| ApiGateway
-    StaticServe -.->|Serves Single-Page App| UI
+    Query -->|"HTTPS / JSON API"| ApiGateway
+    StaticServe -.->|"Serves Single-Page App"| UI
 
     ApiGateway --> ZodValidator --> AuthMid
     AuthMid --> Modules
@@ -146,10 +146,10 @@ flowchart TD
     AdapterFactory --> WCLive
     AdapterFactory --> WCMock
 
-    WCLive -.->|REST / HTTPS| WooStore
-    WooStore -.->|Webhooks (HMAC-SHA256)| WebhookVerifier
+    WCLive -.->|"REST / HTTPS"| WooStore
+    WooStore -.->|"HMAC-SHA256 Webhooks"| WebhookVerifier
     WebhookVerifier --> SyncEngine
-    AIMod -.->|Server-side REST| GeminiAPI
+    AIMod -.->|"Server-side REST"| GeminiAPI
 
     Repo --> SupabasePG
     Repo --> LocalSQLite
@@ -221,18 +221,18 @@ flowchart TD
     CheckOrders -- "0 Orders" --> Lead["Prospect / Lead"]
     CheckOrders -- "1 Order" --> CheckDaysNew{"Days Since Last Order <= 30?"}
     
-    CheckDaysNew -- Yes --> SegNew["🟢 New Customer<br/>(First purchase within 30 days)"]
-    CheckDaysNew -- No --> CheckSpend{"Lifetime Spend > $500?"}
+    CheckDaysNew -- "Yes" --> SegNew["🟢 New Customer<br/>First purchase within 30 days"]
+    CheckDaysNew -- "No" --> CheckSpend{"Lifetime Spend > $500?"}
     
-    CheckOrders -- ">= 2 Orders" --> CheckSpend
+    CheckOrders -- "2 or more Orders" --> CheckSpend
     
-    CheckSpend -- Yes --> SegHighValue["⭐ High-Value Customer<br/>(LTV > $500.00)"]
-    CheckSpend -- No --> CheckInactive{"Days Since Last Order > 60?"}
+    CheckSpend -- "Yes" --> SegHighValue["⭐ High-Value Customer<br/>LTV over $500.00"]
+    CheckSpend -- "No" --> CheckInactive{"Days Since Last Order > 60?"}
     
     SegHighValue --> CheckInactive
     
-    CheckInactive -- Yes --> SegInactive["🔴 Inactive / Churn Risk<br/>(No orders in 60+ days)"]
-    CheckInactive -- No --> SegRepeat["🔁 Repeat Buyer<br/>(Active recurring purchaser)"]
+    CheckInactive -- "Yes" --> SegInactive["🔴 Inactive / Churn Risk<br/>No orders in 60+ days"]
+    CheckInactive -- "No" --> SegRepeat["🔁 Repeat Buyer<br/>Active recurring purchaser"]
 ```
 
 ---
@@ -269,20 +269,20 @@ FlowAI scans store metrics to uncover churning high-value customers, diagnose ro
 
 ```mermaid
 flowchart LR
-    ScanTrigger["🔍 Retention Scan Triggered"] --> FilterCustomers["Filter Customers:<br/>• LTV > $500<br/>• Inactive > 60 Days"]
+    ScanTrigger["🔍 Retention Scan Triggered"] --> FilterCustomers["Filter Customers:<br/>• LTV over $500<br/>• Inactive over 60 Days"]
     FilterCustomers --> ComputeSignals["Extract Purchase Signals:<br/>• Preferred Categories<br/>• Order Cadence<br/>• Days Silent"]
     
     ComputeSignals --> EngineSelect{"Google Gemini API<br/>Configured?"}
     
-    EngineSelect -- Yes --> GeminiPrompt["Prompt Gemini 1.5 Flash<br/>(Strict JSON Schema)"]
-    EngineSelect -- No --> HeuristicEngine["Deterministic Grounded<br/>Intelligence Engine"]
+    EngineSelect -- "Yes" --> GeminiPrompt["Prompt Gemini 1.5 Flash<br/>Strict JSON Schema"]
+    EngineSelect -- "No" --> HeuristicEngine["Deterministic Grounded<br/>Intelligence Engine"]
     
     GeminiPrompt --> ZodValidation["Zod Schema Parse<br/>& Safety Sanitization"]
     HeuristicEngine --> ZodValidation
 
-    ZodValidation --> FormulateOffer["Formulate Targeted Incentive<br/>(15-20% VIP Recovery Offer)"]
-    FormulateOffer --> AutoDraft["Persist Draft in Database<br/>(status: pending_approval)"]
-    AutoDraft --> OperatorReview["👤 Operator Reviews in FlowAI Screen<br/>(1-Click Approve or Edit)"]
+    ZodValidation --> FormulateOffer["Formulate Targeted Incentive<br/>15-20% VIP Recovery Offer"]
+    FormulateOffer --> AutoDraft["Persist Draft in Database<br/>status: pending_approval"]
+    AutoDraft --> OperatorReview["👤 Operator Reviews in FlowAI Screen<br/>1-Click Approve or Edit"]
 ```
 
 ---
@@ -293,20 +293,20 @@ FlowCRM deploys onto Render as a **single unified Web Service**, eliminating cro
 
 ```mermaid
 flowchart TD
-    subgraph Browser ["User Browser (Desktop / Tablet / Mobile)"]
+    subgraph Browser ["User Browser - Desktop / Tablet / Mobile"]
         UserReq["HTTP Request to https://flowcrm.onrender.com"]
     end
 
-    subgraph RenderContainer ["Render Web Service Container (Port 10000)"]
-        ExpressApp["Express.js Server (backend/src/app.ts)"]
+    subgraph RenderContainer ["Render Web Service Container - Port 10000"]
+        ExpressApp["Express.js Server - backend/src/app.ts"]
         
         RouteCheck{"Request URL Pattern"}
         
         ExpressApp --> RouteCheck
         
-        RouteCheck -- "/api/v1/*" --> ApiRoutes["API Router & Middleware<br/>(Customers, Orders, AI, Sync)"]
-        RouteCheck -- Static Files (/assets/*) --> StaticAssets["Serve Vite Chunks<br/>(frontend/dist/assets)"]
-        RouteCheck -- Non-API Routes (/*) --> SPAFallback["SPA Fallback<br/>(frontend/dist/index.html)"]
+        RouteCheck -- "API Routes: /api/v1/*" --> ApiRoutes["API Router & Middleware<br/>Customers, Orders, AI, Sync"]
+        RouteCheck -- "Static Assets: /assets/*" --> StaticAssets["Serve Vite Chunks<br/>frontend/dist/assets"]
+        RouteCheck -- "SPA Routes: /*" --> SPAFallback["SPA Fallback<br/>frontend/dist/index.html"]
     end
 
     UserReq --> ExpressApp
