@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { Building2, Database, Key, Shield, User } from 'lucide-react';
+import { Building2, Database, User } from 'lucide-react';
 import React from 'react';
 import { Badge } from '../components/ui/Badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/Card';

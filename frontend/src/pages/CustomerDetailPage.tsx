@@ -3,8 +3,6 @@ import {
   ArrowLeft,
   Bot,
   Calendar,
-  CheckCircle2,
-  Clock,
   DollarSign,
   Mail,
   MapPin,
@@ -15,7 +13,6 @@ import {
   Send,
   Sparkles,
   Trash2,
-  User,
 } from 'lucide-react';
 import React, { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';

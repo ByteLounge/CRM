@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { Mail, Search, UserPlus, Users } from 'lucide-react';
+import { Mail, Search, Users } from 'lucide-react';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { SegmentBadge } from '../components/ui/Badge';

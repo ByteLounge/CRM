@@ -1,13 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   Check,
-  CheckCircle2,
   Copy,
   Layers,
   Link as LinkIcon,
   RefreshCw,
-  Server,
-  Shield,
   Store,
   Webhook,
 } from 'lucide-react';
@@ -21,7 +18,7 @@ import { api } from '../services/api';
 export const IntegrationsPage: React.FC = () => {
   const queryClient = useQueryClient();
 
-  const { data: status, isLoading } = useQuery({
+  const { data: status } = useQuery({
     queryKey: ['wcStatus'],
     queryFn: () => api.woocommerce.getStatus(),
   });
